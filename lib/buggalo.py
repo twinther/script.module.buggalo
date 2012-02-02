@@ -110,9 +110,8 @@ def _gatherData(type, value, traceback):
     xbmcInfo = dict()
     xbmcInfo['buildVersion'] = xbmc.getInfoLabel('System.BuildVersion')
     xbmcInfo['buildDate'] = xbmc.getInfoLabel('System.BuildDate')
-    xbmcInfo['kernelVersion'] = xbmc.getInfoLabel('System.KernelVersion')
+    xbmcInfo['skin'] = xbmc.getSkinDir()
     xbmcInfo['language'] = xbmc.getInfoLabel('System.Language')
-    xbmcInfo['skin'] = xbmc.getInfoLabel('Skin.CurrentTheme')
     data['xbmc'] = xbmcInfo
 
     execution = dict()
