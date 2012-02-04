@@ -34,12 +34,14 @@ import xbmcaddon
 #   The full URL to where the gathered data should be posted.
 SUBMIT_URL = None
 
+
 def getRandomHeading():
     """
     Get a random heading for use in dialogs, etc.
     The heading contains a random movie quote from the English strings.xml
     """
     return getLocalizedString(random.randint(90000, 90005))
+
 
 def getLocalizedString(id):
     """
@@ -48,7 +50,8 @@ def getLocalizedString(id):
     buggaloAddon = xbmcaddon.Addon(id = 'script.module.buggalo')
     return buggaloAddon.getLocalizedString(id)
 
-def onExceptionRaised(includeScreenshot = False):
+
+def onExceptionRaised():
     """
     Invoke this method in an except clause to allow the user to submit
     a bug report with stacktrace, system information, etc.
@@ -70,10 +73,9 @@ def onExceptionRaised(includeScreenshot = False):
 
     if xbmcgui.Dialog().yesno(heading, line1, line2, line3, no, yes):
         data = _gatherData(type, value, traceback)
-        if includeScreenshot:
-            data['screenshot'] = _captureScreenshot()
         _submitData(data)
         xbmcgui.Dialog().ok(heading, thanks)
+
 
 def _gatherData(type, value, traceback):
     data = dict()
@@ -127,14 +129,6 @@ def _gatherData(type, value, traceback):
     data['exception'] = exception
 
     return simplejson.dumps(data)
-
-def _captureScreenshot():
-    rc = xbmc.xenderCapture()
-    rc.capture(640, 360, xbmc.CAPTURE_FLAG_IMMEDIATELY) 
-    image = Image.frombuffer(rc.getImageFormat(), (rc.getWidth(), rc.getHeight()), rc.getImage())
-    return image.tostring('jpg', {'optimize' : True})
-
-    
 
 
 def _submitData(data):

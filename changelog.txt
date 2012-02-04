@@ -1,7 +1,4 @@
-[B]Version 1.1.0 - 2012-01-04[/B]
-- Fixed data collection on Windows
-
-[B]Version 1.0.0 - 2012[/B]
-- Initial version
+[B]Version 1.0.0 - 2012-01-04[/B]
+- Initial module version
 - Named after a creature in my favorite animated show:
   http://theinfosphere.org/Where_the_Buggalo_Roam
