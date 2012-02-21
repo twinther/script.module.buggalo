@@ -34,6 +34,10 @@ import xbmcaddon
 #   The full URL to where the gathered data should be posted.
 SUBMIT_URL = None
 
+EXTRA_DATA = dict()
+
+def addExtraData(key, value):
+    EXTRA_DATA[key] = value
 
 def getRandomHeading():
     """
@@ -51,7 +55,7 @@ def getLocalizedString(id):
     return buggaloAddon.getLocalizedString(id)
 
 
-def onExceptionRaised():
+def onExceptionRaised(extraData = None):
     """
     Invoke this method in an except clause to allow the user to submit
     a bug report with stacktrace, system information, etc.
@@ -72,12 +76,12 @@ def onExceptionRaised():
     thanks = getLocalizedString(91005)
 
     if xbmcgui.Dialog().yesno(heading, line1, line2, line3, no, yes):
-        data = _gatherData(type, value, traceback)
+        data = _gatherData(type, value, traceback, extraData)
         _submitData(data)
         xbmcgui.Dialog().ok(heading, thanks)
 
 
-def _gatherData(type, value, traceback):
+def _gatherData(type, value, traceback, extraData):
     data = dict()
     data['version'] = 3
     data['timestamp'] = datetime.datetime.now().isoformat()
@@ -96,7 +100,7 @@ def _gatherData(type, value, traceback):
         system['release'] = release
         system['version'] = version
         system['machine'] = machine
-    except Exception as ex:
+    except Exception, ex:
         system['sysname'] = sys.platform
         system['exception'] = str(ex)
     data['system'] = system
@@ -127,6 +131,20 @@ def _gatherData(type, value, traceback):
     exception['value'] = str(value)
     exception['stacktrace'] = tb.format_tb(traceback)
     data['exception'] = exception
+
+    extraDataInfo = dict()
+    try:
+        for (key, value) in EXTRA_DATA.items():
+            extraDataInfo[key] = str(value)
+
+        if type(extraData) == dict:
+            for (key, value) in extraData.items():
+                extraDataInfo[key] = str(value)
+        elif extraData is not None:
+            extraDataInfo[''] = str(extraData)
+    except Exception, ex:
+        extraDataInfo['exception'] = str(ex)
+    data['extraData'] = extraDataInfo
 
     return simplejson.dumps(data)
 
