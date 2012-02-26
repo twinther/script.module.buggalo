@@ -2,6 +2,7 @@
 <addon id="script.module.buggalo" name="Buggalo Exception Collector" version="1.0.1" provider-name="twinther [tommy@winther.nu]">
     <requires>
         <import addon="xbmc.python" version="2.0"/>
+        <import addon="script.module.simplejson" version="2.0.10"/>
     </requires>
     <extension point="xbmc.python.module" library="lib"/>
     <extension point="xbmc.addon.metadata">
