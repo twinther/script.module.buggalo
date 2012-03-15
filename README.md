@@ -40,6 +40,14 @@ To use this script you must do two things besides importing it.
     See this link for an example:
     https://github.com/twinther/script.tvguide/blob/master/gui.py#L140
 
+    Optionally, instead of writing the try..except block yourself, you can decorate the function
+    with @buggalo_try_except(). Function specific may be provide in the decorator:
+    ```python
+    @buggalo_try_except({'class' : 'MyWindowXML', 'method' : 'onInit', 'other_key' : 'other_value'})
+    def onInit(self);
+        pass
+    ```
+
 3.  Finally you must setup the website where the error report is submitted.
     A good starting point is my buggalo-web module on github:
     https://github.com/twinther/buggalo-web

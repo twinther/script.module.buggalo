@@ -55,6 +55,22 @@ def getLocalizedString(id):
     return buggaloAddon.getLocalizedString(id)
 
 
+def buggalo_try_except(extraData = None):
+    """
+    @buggalo_try_except function decorator wraps a function in a try..except clause and invokes onExceptionRaised()
+    in case an exception is raised. Provide extraData to specific function specific extraData.
+
+    @param extraData: str or dict
+    """
+    def decorator(fn):
+        def wrap_in_try_except(*args, **kwargs):
+            try:
+                fn(*args, **kwargs)
+            except Exception:
+                onExceptionRaised(extraData)
+        return wrap_in_try_except
+    return decorator
+
 def onExceptionRaised(extraData = None):
     """
     Invoke this method in an except clause to allow the user to submit
@@ -62,6 +78,8 @@ def onExceptionRaised(extraData = None):
 
     This also avoids the 'Script error' popup in XBMC, unless of course
     an exception is thrown in this code :-)
+
+    @param extraData: str or dict
     """
     # start by logging the usual info to stderr
     (type, value, traceback) = sys.exc_info()
@@ -160,4 +178,6 @@ def _submitData(data):
             break # success; no further attempts
         except Exception:
             pass # probably timeout; retry
+
+
 
