@@ -17,7 +17,7 @@ http://tommy.winther.nu/files/2011/12/script_error.png
 
 HOW TO USE
 ==========
-To use this script you must do two things besides importing it.
+To use this script you must do these things besides importing it.
 
 1.  Set buggalo.SUBMIT_URL to a full URL where the collected data is submitted.
 
@@ -55,6 +55,11 @@ To use this script you must do two things besides importing it.
     If you want to roll your own custom setup then take a look at the submit.php
     file which store the error report in the database.
     https://github.com/twinther/buggalo-web/blob/master/submit.php
+
+    If you don't want to or can't setup your own website you can use the shared site at:
+    http://buggalo.xbmc.info/
+    In this case buggalo.SUBMIT_URL must be set to:
+    http://buggalo.xbmc.info/submit.php
 
 WHAT IS COLLECTED
 =================
