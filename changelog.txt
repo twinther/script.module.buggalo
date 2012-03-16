@@ -1,4 +1,4 @@
-[B]Version 1.0.1 - 2012-03-xx[/B]
+[B]Version 1.0.1 - 2012-03-16[/B]
 - Added option to pass extra data along in the error report
   either through addExtraData(key, value) or directly in
   onExceptionRaised(data) as a dict or string.

@@ -42,6 +42,7 @@ To use this script you must do two things besides importing it.
 
     Optionally, instead of writing the try..except block yourself, you can decorate the function
     with @buggalo_try_except(). Function specific may be provide in the decorator:
+
     ```python
     @buggalo_try_except({'class' : 'MyWindowXML', 'method' : 'onInit', 'other_key' : 'other_value'})
     def onInit(self);
