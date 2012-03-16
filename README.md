@@ -45,7 +45,7 @@ To use this script you must do two things besides importing it.
 
     ```python
     @buggalo_try_except({'class' : 'MyWindowXML', 'method' : 'onInit', 'other_key' : 'other_value'})
-    def onInit(self);
+    def onInit(self)
         pass
     ```
 
