@@ -1,3 +1,6 @@
+[B]Version 1.1.0 - 2012-xx-xx[/B]
+- Added custom error dialog with details view
+
 [B]Version 1.0.1 - 2012-03-16[/B]
 - Added option to pass extra data along in the error report
   either through addExtraData(key, value) or directly in

@@ -31,7 +31,11 @@ import xbmc
 import xbmcgui
 import xbmcaddon
 
+import gui
+
 #   The full URL to where the gathered data should be posted.
+import xbmcplugin
+
 SUBMIT_URL = None
 
 EXTRA_DATA = dict()
@@ -85,6 +89,10 @@ def onExceptionRaised(extraData = None):
     (type, value, traceback) = sys.exc_info()
     tb.print_exception(type, value, traceback)
 
+
+    HANDLE = int(sys.argv[1])
+    xbmcplugin.endOfDirectory(HANDLE, succeeded=False) # TODO
+
     heading = getRandomHeading()
     line1 = getLocalizedString(91000)
     line2 = getLocalizedString(91001)
@@ -93,10 +101,16 @@ def onExceptionRaised(extraData = None):
     no = getLocalizedString(91004)
     thanks = getLocalizedString(91005)
 
-    if xbmcgui.Dialog().yesno(heading, line1, line2, line3, no, yes):
-        data = _gatherData(type, value, traceback, extraData)
-        _submitData(data)
-        xbmcgui.Dialog().ok(heading, thanks)
+    data = _gatherData(type, value, traceback, extraData)
+
+    d = gui.BuggaloDialog(heading, data)
+    d.doModal()
+    del d
+
+#    if xbmcgui.Dialog().yesno(heading, line1, line2, line3, no, yes):
+#        data = _gatherData(type, value, traceback, extraData)
+#        _submitData(data)
+#        xbmcgui.Dialog().ok(heading, thanks)
 
 
 def _gatherData(type, value, traceback, extraData):
@@ -164,7 +178,8 @@ def _gatherData(type, value, traceback, extraData):
         extraDataInfo['exception'] = str(ex)
     data['extraData'] = extraDataInfo
 
-    return simplejson.dumps(data)
+    return data
+    #return simplejson.dumps(data)
 
 
 def _submitData(data):
