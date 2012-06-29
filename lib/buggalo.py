@@ -23,16 +23,22 @@ import traceback as tb
 import random
 
 import xbmcaddon
-
-import client
-import gui
-
-#   The full URL to where the gathered data should be posted.
 import xbmcplugin
 
-SUBMIT_URL = None
+import buggalo_client as client
+import buggalo_gui as gui
+import buggalo_userflow as userflow
 
+print sys.argv
+
+#   The full URL to where the gathered data should be posted.
+SUBMIT_URL = None
 EXTRA_DATA = dict()
+SCRIPT_ADDON = len(sys.argv) == 1
+
+if not SCRIPT_ADDON:
+    # Automatically track userflow for plugin type addons
+    userflow.trackUserFlow('%s%s' % (sys.argv[0], sys.argv[2]))
 
 def addExtraData(key, value):
     EXTRA_DATA[key] = value
@@ -83,9 +89,13 @@ def onExceptionRaised(extraData = None):
     (type, value, traceback) = sys.exc_info()
     tb.print_exception(type, value, traceback)
 
-
-    HANDLE = int(sys.argv[1])
-    xbmcplugin.endOfDirectory(HANDLE, succeeded=False) # TODO
+    if not SCRIPT_ADDON:
+        try:
+            # signal error to XBMC to hide progress dialog
+            HANDLE = int(sys.argv[1])
+            xbmcplugin.endOfDirectory(HANDLE, succeeded=False)
+        except Exception:
+            pass
 
     heading = getRandomHeading()
     data = client.gatherData(type, value, traceback, extraData, EXTRA_DATA)
@@ -93,10 +103,3 @@ def onExceptionRaised(extraData = None):
     d = gui.BuggaloDialog(SUBMIT_URL, heading, data)
     d.doModal()
     del d
-
-#    if xbmcgui.Dialog().yesno(heading, line1, line2, line3, no, yes):
-#        data = _gatherData(type, value, traceback, extraData)
-#        client.submitData(SUBMIT_URL, data)
-#        xbmcgui.Dialog().ok(heading, thanks)
-
-

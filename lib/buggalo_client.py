@@ -29,6 +29,8 @@ import urllib2
 import xbmc
 import xbmcaddon
 
+import buggalo_userflow as userflow
+
 def gatherData(type, value, tracebackInfo, extraData, globalExtraData):
     data = dict()
     data['version'] = 3
@@ -79,6 +81,8 @@ def gatherData(type, value, tracebackInfo, extraData, globalExtraData):
     exception['value'] = str(value)
     exception['stacktrace'] = traceback.format_tb(tracebackInfo)
     data['exception'] = exception
+
+    data['userflow'] = userflow.load()
 
     extraDataInfo = dict()
     try:
