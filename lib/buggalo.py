@@ -18,19 +18,13 @@
 #  http://www.gnu.org/copyleft/gpl.html
 #
 #
-import os
 import sys
 import traceback as tb
-import datetime
-import urllib2
-import simplejson
 import random
-import platform
 
-import xbmc
-import xbmcgui
 import xbmcaddon
 
+import client
 import gui
 
 #   The full URL to where the gathered data should be posted.
@@ -94,105 +88,15 @@ def onExceptionRaised(extraData = None):
     xbmcplugin.endOfDirectory(HANDLE, succeeded=False) # TODO
 
     heading = getRandomHeading()
-    line1 = getLocalizedString(91000)
-    line2 = getLocalizedString(91001)
-    line3 = getLocalizedString(91002)
-    yes = getLocalizedString(91003)
-    no = getLocalizedString(91004)
-    thanks = getLocalizedString(91005)
+    data = client.gatherData(type, value, traceback, extraData, EXTRA_DATA)
 
-    data = _gatherData(type, value, traceback, extraData)
-
-    d = gui.BuggaloDialog(heading, data)
+    d = gui.BuggaloDialog(SUBMIT_URL, heading, data)
     d.doModal()
     del d
 
 #    if xbmcgui.Dialog().yesno(heading, line1, line2, line3, no, yes):
 #        data = _gatherData(type, value, traceback, extraData)
-#        _submitData(data)
+#        client.submitData(SUBMIT_URL, data)
 #        xbmcgui.Dialog().ok(heading, thanks)
-
-
-def _gatherData(type, value, traceback, extraData):
-    data = dict()
-    data['version'] = 3
-    data['timestamp'] = datetime.datetime.now().isoformat()
-
-    system = dict()
-    try:
-        if hasattr(os, 'uname'):
-            # Works on recent unix flavors
-            (sysname, nodename, release, version, machine) = os.uname()
-        else:
-            # Works on Windows (and others?)
-            (sysname, nodename, release, version, machine, processor) = platform.uname()
-
-        system['nodename'] = nodename
-        system['sysname'] = sysname
-        system['release'] = release
-        system['version'] = version
-        system['machine'] = machine
-    except Exception, ex:
-        system['sysname'] = sys.platform
-        system['exception'] = str(ex)
-    data['system'] = system
-
-    addon = xbmcaddon.Addon()
-    addonInfo = dict()
-    addonInfo['id'] = addon.getAddonInfo('id')
-    addonInfo['name'] = addon.getAddonInfo('name')
-    addonInfo['version'] = addon.getAddonInfo('version')
-    addonInfo['path'] = addon.getAddonInfo('path')
-    addonInfo['profile'] = addon.getAddonInfo('profile')
-    data['addon'] = addonInfo
-
-    xbmcInfo = dict()
-    xbmcInfo['buildVersion'] = xbmc.getInfoLabel('System.BuildVersion')
-    xbmcInfo['buildDate'] = xbmc.getInfoLabel('System.BuildDate')
-    xbmcInfo['skin'] = xbmc.getSkinDir()
-    xbmcInfo['language'] = xbmc.getInfoLabel('System.Language')
-    data['xbmc'] = xbmcInfo
-
-    execution = dict()
-    execution['python'] = sys.version
-    execution['sys.argv'] = sys.argv
-    data['execution'] = execution
-
-    exception = dict()
-    exception['type'] = str(type)
-    exception['value'] = str(value)
-    exception['stacktrace'] = tb.format_tb(traceback)
-    data['exception'] = exception
-
-    extraDataInfo = dict()
-    try:
-        for (key, value) in EXTRA_DATA.items():
-            extraDataInfo[key] = str(value)
-
-        if type(extraData) == dict:
-            for (key, value) in extraData.items():
-                extraDataInfo[key] = str(value)
-        elif extraData is not None:
-            extraDataInfo[''] = str(extraData)
-    except Exception, ex:
-        extraDataInfo['exception'] = str(ex)
-    data['extraData'] = extraDataInfo
-
-    return data
-    #return simplejson.dumps(data)
-
-
-def _submitData(data):
-    for attempt in range(0, 3):
-        try:
-            req = urllib2.Request(SUBMIT_URL, data)
-            req.add_header('Content-Type', 'text/json')
-            u = urllib2.urlopen(req)
-            u.read()
-            u.close()
-            break # success; no further attempts
-        except Exception:
-            pass # probably timeout; retry
-
 
 

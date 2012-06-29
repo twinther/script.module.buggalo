@@ -18,6 +18,9 @@
 #  http://www.gnu.org/copyleft/gpl.html
 #
 #
+import client
+
+import xbmc
 import xbmcaddon
 import xbmcgui
 
@@ -27,40 +30,50 @@ ACTION_PARENT_DIR = 9
 ACTION_PREVIOUS_MENU = 10
 
 class BuggaloDialog(xbmcgui.WindowXMLDialog):
+    THANKS_YOU_VISIBLE_LABEL = 98
     DETAILS_VISIBLE_LABEL = 99
     CLOSE_BUTTON = 100
     SUBMIT_BUTTON = 101
     DETAILS_BUTTON = 102
     DETAILS_LIST = 103
-    TITLE_LABEL = 110
+    HEADING_LABEL = 110
 
-    def __new__(cls, title, data):
+    ERROR_MESSAGE_GROUP = 200
+    DETAILS_GROUP = 201
+    THANK_YOU_GROUP = 202
+
+    def __new__(cls, serviceUrl, heading, data):
         return super(BuggaloDialog, cls).__new__(cls, 'buggalo-dialog.xml', buggaloAddon.getAddonInfo('path'))
 
-    def __init__(self, title, data):
+    def __init__(self, serviceUrl, heading, data):
         super(BuggaloDialog, self).__init__()
-        self.title = title
+        self.serviceUrl = serviceUrl
+        self.heading = heading
         self.data = data
         self.detailsVisible = False
 
     def onInit(self):
-        self.getControl(self.TITLE_LABEL).setLabel(self.title)
+        self.getControl(self.HEADING_LABEL).setLabel(self.heading)
         self.getControl(self.DETAILS_VISIBLE_LABEL).setVisible(not self.detailsVisible)
+        self.getControl(self.THANKS_YOU_VISIBLE_LABEL).setVisible(True)
         listControl = self.getControl(self.DETAILS_LIST)
 
-        for group in sorted(self.data.keys()):
-            values = self.data[group]
-            if type(values) == dict:
-                item = xbmcgui.ListItem(label = '[B]%s[/B]' % group)
-                listControl.addItem(item)
-                for key in values:
-                        item = xbmcgui.ListItem(label = '    %s' % key, label2 = str(values[key]))
-                        listControl.addItem(item)
+        try:
+            for group in sorted(self.data.keys()):
+                values = self.data[group]
+                if type(values) == dict:
+                    item = xbmcgui.ListItem(label = '[B]%s[/B]' % group)
+                    listControl.addItem(item)
+                    for key in values:
+                            item = xbmcgui.ListItem(label = '    %s' % key, label2 = str(values[key]))
+                            listControl.addItem(item)
 
-            else:
-                item = xbmcgui.ListItem(label = '[B]%s[/B]' % group, label2 = str(values))
-                listControl.addItem(item)
-
+                else:
+                    item = xbmcgui.ListItem(label = '[B]%s[/B]' % group, label2 = str(values))
+                    listControl.addItem(item)
+        except Exception:
+            item = xbmcgui.ListItem(label = buggaloAddon.getLocalizedString(91007))
+            listControl.addItem(item)
 
 
     def onAction(self, action):
@@ -72,7 +85,13 @@ class BuggaloDialog(xbmcgui.WindowXMLDialog):
             self.close()
 
         elif controlId == self.SUBMIT_BUTTON:
-            pass
+            self.getControl(self.DETAILS_VISIBLE_LABEL).setVisible(True)
+            self.getControl(self.THANKS_YOU_VISIBLE_LABEL).setVisible(False)
+
+            client.submitData(self.serviceUrl, self.data)
+
+            xbmc.sleep(2000)
+            self.close()
 
         elif controlId == self.DETAILS_BUTTON:
             self.detailsVisible = not self.detailsVisible
