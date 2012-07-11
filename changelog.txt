@@ -1,6 +1,7 @@
-[B]Version 1.1.0 - 2012-xx-xx[/B]
+[B]Version 1.1.0 - 2012-07-11[/B]
 - Added custom error dialog with details view
 - Added support for tracking userflow
+- More robust handling of extra data
 
 [B]Version 1.0.1 - 2012-03-16[/B]
 - Added option to pass extra data along in the error report

@@ -28,30 +28,47 @@ import xbmcaddon
 BUGGALO_ADDON = xbmcaddon.Addon('script.module.buggalo')
 ADDON = xbmcaddon.Addon()
 
+# TODO always send userflow, ie. daily upload for usage statistics
+
 def trackUserFlow(value):
-    userFlow = load()
+    """
+    Registers an entry in the user's flow through the addon.
+    The values is stored in a dict with the current time as key and the provided value as the value.
+
+    @param value: the value indicating the user's flow.
+    @type value: str
+    """
+    userFlow = loadUserFlow()
     key = datetime.datetime.now().isoformat()
 
     userFlow[key] = value
-    save(userFlow)
+    saveUserFlow(userFlow)
 
-def load():
+def loadUserFlow():
     path = xbmc.translatePath(BUGGALO_ADDON.getAddonInfo('profile'))
     file = os.path.join(path, '%s.json' % ADDON.getAddonInfo('id'))
 
     if os.path.exists(file):
-        userFlow = simplejson.load(open(file))
+        try:
+            userFlow = simplejson.load(open(file))
+        except Exception:
+            userFlow = dict()
     else:
         userFlow = dict()
     return userFlow
 
-def save(userFlow):
+def saveUserFlow(userFlow):
     path = xbmc.translatePath(BUGGALO_ADDON.getAddonInfo('profile'))
     if not os.path.exists(path):
-        os.makedirs(path)
-    file = os.path.join(path, '%s.json' % ADDON.getAddonInfo('id'))
+        try:
+            os.makedirs(path)
+        except OSError:
+            print "unable to create directory for saving userflow; userflow will not be saveds"
+            return # ignore
 
     try:
+        file = os.path.join(path, '%s.json' % ADDON.getAddonInfo('id'))
+
         # remove entries older than 24 hours
         # we compare strings rather the datetimes (a little hackish though)
         # but datetime.datetime.strptime() often fail for no apparent reason

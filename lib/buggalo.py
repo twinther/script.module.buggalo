@@ -29,8 +29,6 @@ import buggalo_client as client
 import buggalo_gui as gui
 import buggalo_userflow as userflow
 
-print sys.argv
-
 #   The full URL to where the gathered data should be posted.
 SUBMIT_URL = None
 EXTRA_DATA = dict()
@@ -42,6 +40,19 @@ if not SCRIPT_ADDON:
 
 def addExtraData(key, value):
     EXTRA_DATA[key] = value
+
+def trackUserFlow(value):
+    """
+    Registers an entry in the user's flow through the addon.
+    The values is stored in a dict with the current time as key and the provided value as the value.
+
+    For plugin-type addons the user flow is automatically registered for each page the user loads.
+    The value can be any string, so it's also usefull in script-type addons.
+
+    @param value: the value indicating the user's flow.
+    @type value: str
+    """
+    userflow.trackUserFlow(value)
 
 def getRandomHeading():
     """

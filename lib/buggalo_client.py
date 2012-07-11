@@ -33,8 +33,14 @@ import buggalo_userflow as userflow
 
 def gatherData(type, value, tracebackInfo, extraData, globalExtraData):
     data = dict()
-    data['version'] = 3
+    data['version'] = 4
     data['timestamp'] = datetime.datetime.now().isoformat()
+
+    exception = dict()
+    exception['stacktrace'] = traceback.format_tb(tracebackInfo)
+    exception['type'] = str(type)
+    exception['value'] = str(value)
+    data['exception'] = exception
 
     system = dict()
     try:
@@ -76,25 +82,32 @@ def gatherData(type, value, tracebackInfo, extraData, globalExtraData):
     execution['sys.argv'] = sys.argv
     data['execution'] = execution
 
-    exception = dict()
-    exception['type'] = str(type)
-    exception['value'] = str(value)
-    exception['stacktrace'] = traceback.format_tb(tracebackInfo)
-    data['exception'] = exception
-
-    data['userflow'] = userflow.load()
+    data['userflow'] = userflow.loadUserFlow()
 
     extraDataInfo = dict()
     try:
-        for (key, value) in globalExtraData.items():
-            extraDataInfo[key] = str(value)
 
-        if type(extraData) == dict:
-            for (key, value) in extraData.items():
+        for (key, value) in globalExtraData.items():
+            if isinstance(extraData, str):
+                extraDataInfo[key] = value.decode('utf-8', 'ignore')
+            elif isinstance(extraData, unicode):
+                extraDataInfo[key] = value
+            else:
                 extraDataInfo[key] = str(value)
+
+        if isinstance(extraData, dict):
+            for (key, value) in extraData.items():
+                if isinstance(extraData, str):
+                    extraDataInfo[key] = value.decode('utf-8', 'ignore')
+                elif isinstance(extraData, unicode):
+                    extraDataInfo[key] = value
+                else:
+                    extraDataInfo[key] = str(value)
         elif extraData is not None:
             extraDataInfo[''] = str(extraData)
     except Exception, ex:
+        (type, value, tb) = sys.exc_info()
+        traceback.print_exception(type, value, tb)
         extraDataInfo['exception'] = str(ex)
     data['extraData'] = extraDataInfo
 
