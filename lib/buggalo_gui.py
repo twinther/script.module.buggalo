@@ -69,7 +69,7 @@ class BuggaloDialog(xbmcgui.WindowXMLDialog):
                     keys = sorted(keys)
 
                 for key in keys:
-                        item = xbmcgui.ListItem(label = '    %s' % key, label2 = str(values[key]))
+                        item = xbmcgui.ListItem(label = '    %s' % key, label2 = unicode(values[key]))
                         listControl.addItem(item)
 
             else:
