@@ -47,7 +47,7 @@ def trackUserFlow(value):
     The values is stored in a dict with the current time as key and the provided value as the value.
 
     For plugin-type addons the user flow is automatically registered for each page the user loads.
-    The value can be any string, so it's also usefull in script-type addons.
+    The value can be any string, so it's also useful in script-type addons.
 
     @param value: the value indicating the user's flow.
     @type value: str

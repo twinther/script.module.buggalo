@@ -58,26 +58,26 @@ class BuggaloDialog(xbmcgui.WindowXMLDialog):
         self.getControl(self.THANKS_YOU_VISIBLE_LABEL).setVisible(True)
         listControl = self.getControl(self.DETAILS_LIST)
 
-#        try:
-        for group in sorted(self.data.keys()):
-            values = self.data[group]
-            if type(values) == dict:
-                item = xbmcgui.ListItem(label = '[B]%s[/B]' % group)
-                listControl.addItem(item)
-                keys = values.keys()
-                if group == 'userflow':
-                    keys = sorted(keys)
+        try:
+            for group in sorted(self.data.keys()):
+                values = self.data[group]
+                if type(values) == dict:
+                    item = xbmcgui.ListItem(label = '[B]%s[/B]' % group)
+                    listControl.addItem(item)
+                    keys = values.keys()
+                    if group == 'userflow':
+                        keys = sorted(keys)
 
-                for key in keys:
-                        item = xbmcgui.ListItem(label = '    %s' % key, label2 = unicode(values[key]))
-                        listControl.addItem(item)
+                    for key in keys:
+                            item = xbmcgui.ListItem(label = '    %s' % key, label2 = str(values[key]))
+                            listControl.addItem(item)
 
-            else:
-                item = xbmcgui.ListItem(label = '[B]%s[/B]' % group, label2 = str(values))
-                listControl.addItem(item)
-#        except Exception as ex:
-#            item = xbmcgui.ListItem(label2 = buggaloAddon.getLocalizedString(91007))
-#           listControl.addItem(item)
+                else:
+                    item = xbmcgui.ListItem(label = '[B]%s[/B]' % group, label2 = str(values))
+                    listControl.addItem(item)
+        except Exception:
+            item = xbmcgui.ListItem(label2 = buggaloAddon.getLocalizedString(91007))
+            listControl.addItem(item)
 
 
 
