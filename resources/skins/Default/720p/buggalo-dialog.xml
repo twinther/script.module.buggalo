@@ -21,7 +21,6 @@
             <posy>0</posy>
         </control>
 
-
         <control type="image">
             <posx>-270</posx>
             <posy>-260</posy>
@@ -131,6 +130,14 @@
                 <height>200</height>
                 <texture>buggalo-black.png</texture>
             </control>
+            <control type="image">
+                <posx>-100</posx>
+                <posy>20</posy>
+                <width>170</width>
+                <height>170</height>
+                <texture>buggalo-error.png</texture>
+                <colordiffuse>44ffffff</colordiffuse>
+            </control>
 
             <control type="group" id="200">
                 <description>error message group</description>
@@ -141,36 +148,42 @@
                 <visible>Control.IsVisible(98)</visible>
                 <animation effect="fade" start="100" end="0" time="500">Hidden</animation>
 
-                <control type="image">
-                    <posx>30</posx>
-                    <posy>10</posy>
-                    <width>48</width>
-                    <height>48</height>
-                    <texture>buggalo-error.png</texture>
-                </control>
-
                 <control type="label" id="110">
-                    <posx>90</posx>
+                    <posx>20</posx>
                     <posy>10</posy>
                     <width>600</width>
                     <height>48</height>
-                    <font>font30</font>
+                    <font>font13</font>
                     <label>$ADDON[script.module.buggalo 90000]</label>
                     <aligny>center</aligny>
                 </control>
+                <control type="label" id="111">
+                    <posx>20</posx>
+                    <posy>50</posy>
+                    <width>720</width>
+                    <height>80</height>
+                    <label>$ADDON[script.module.buggalo 91000]</label>
+                </control>
                 <control type="label">
                     <posx>20</posx>
-                    <posy>60</posy>
-                    <width>700</width>
+                    <posy>75</posy>
+                    <width>720</width>
                     <height>80</height>
-                    <label>$ADDON[script.module.buggalo 91000] $ADDON[script.module.buggalo 91001] $ADDON[script.module.buggalo 91002]</label>
-                    <wrapmultiline>true</wrapmultiline>
+                    <label>$ADDON[script.module.buggalo 91001]</label>
+                </control>
+                <control type="label">
+                    <posx>20</posx>
+                    <posy>100</posy>
+                    <width>720</width>
+                    <height>80</height>
+                    <label>$ADDON[script.module.buggalo 91002]</label>
                 </control>
 
                 <control type="button" id="100">
-                    <posx>70</posx>
-                    <posy>120</posy>
-                    <width>180</width>
+                    <description>Don't submit button</description>
+                    <posx>0</posx>
+                    <posy>140</posy>
+                    <width>233</width>
                     <height>40</height>
                     <label>$ADDON[script.module.buggalo 91004]</label>
                     <align>center</align>
@@ -180,9 +193,10 @@
                     <onright>101</onright>
                 </control>
                 <control type="button" id="101">
-                    <posx>270</posx>
-                    <posy>120</posy>
-                    <width>180</width>
+                    <description>Submit button</description>
+                    <posx>253</posx>
+                    <posy>140</posy>
+                    <width>233</width>
                     <height>40</height>
                     <label>$ADDON[script.module.buggalo 91003]</label>
                     <align>center</align>
@@ -193,9 +207,10 @@
                     <onright>102</onright>
                 </control>
                 <control type="button" id="102">
-                    <posx>470</posx>
-                    <posy>120</posy>
-                    <width>180</width>
+                    <description>Details button</description>
+                    <posx>507</posx>
+                    <posy>140</posy>
+                    <width>233</width>
                     <height>40</height>
                     <label>$ADDON[script.module.buggalo 91006]</label>
                     <align>center</align>
@@ -216,7 +231,7 @@
                 <visible>!Control.IsVisible(98)</visible>
                 <animation effect="fade" start="0" end="100" time="500">Visible</animation>
 
-                <control type="label" id="110">
+                <control type="label">
                     <posx>0</posx>
                     <posy>76</posy>
                     <width>740</width>

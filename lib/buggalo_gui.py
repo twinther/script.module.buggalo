@@ -37,6 +37,7 @@ class BuggaloDialog(xbmcgui.WindowXMLDialog):
     DETAILS_BUTTON = 102
     DETAILS_LIST = 103
     HEADING_LABEL = 110
+    DETAILS_LINE1_LABEL = 111
 
     ERROR_MESSAGE_GROUP = 200
     DETAILS_GROUP = 201
@@ -52,10 +53,12 @@ class BuggaloDialog(xbmcgui.WindowXMLDialog):
         self.data = data
         self.detailsVisible = False
 
+
     def onInit(self):
         self.getControl(self.HEADING_LABEL).setLabel(self.heading)
         self.getControl(self.DETAILS_VISIBLE_LABEL).setVisible(not self.detailsVisible)
         self.getControl(self.THANKS_YOU_VISIBLE_LABEL).setVisible(True)
+        self.getControl(self.DETAILS_LINE1_LABEL).setLabel(buggaloAddon.getLocalizedString(91000) % self.data['addon']['name'])
         listControl = self.getControl(self.DETAILS_LIST)
 
         try:
@@ -76,7 +79,7 @@ class BuggaloDialog(xbmcgui.WindowXMLDialog):
                     item = xbmcgui.ListItem(label = '[B]%s[/B]' % group, label2 = str(values))
                     listControl.addItem(item)
         except Exception:
-            item = xbmcgui.ListItem(label2 = buggaloAddon.getLocalizedString(91007))
+            item = xbmcgui.ListItem(label2 = buggaloAddon.getLocalizedString(91008))
             listControl.addItem(item)
 
 
@@ -101,6 +104,10 @@ class BuggaloDialog(xbmcgui.WindowXMLDialog):
         elif controlId == self.DETAILS_BUTTON:
             self.detailsVisible = not self.detailsVisible
             self.getControl(self.DETAILS_VISIBLE_LABEL).setVisible(not self.detailsVisible)
+            if self.detailsVisible:
+                self.getControl(self.DETAILS_BUTTON).setLabel(buggaloAddon.getLocalizedString(91007))
+            else:
+                self.getControl(self.DETAILS_BUTTON).setLabel(buggaloAddon.getLocalizedString(91006))
 
 
     def onFocus(self, control):
