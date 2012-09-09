@@ -63,6 +63,7 @@
                         <width>150</width>
                         <height>40</height>
                         <font>font13</font>
+                        <textcolor>ffffffff</textcolor>
                         <aligny>center</aligny>
                         <selectedcolor>green</selectedcolor>
                         <align>left</align>
@@ -74,6 +75,7 @@
                         <width>570</width>
                         <height>40</height>
                         <font>font13</font>
+                        <textcolor>ffffffff</textcolor>
                         <aligny>center</aligny>
                         <selectedcolor>green</selectedcolor>
                         <align>left</align>
@@ -95,8 +97,8 @@
                         <width>150</width>
                         <height>40</height>
                         <font>font13</font>
+                        <textcolor>ffffffff</textcolor>
                         <aligny>center</aligny>
-                        <selectedcolor>green</selectedcolor>
                         <align>left</align>
                         <info>ListItem.Label</info>
                     </control>
@@ -106,8 +108,8 @@
                         <width>570</width>
                         <height>40</height>
                         <font>font13</font>
+                        <textcolor>ffffffff</textcolor>
                         <aligny>center</aligny>
-                        <selectedcolor>green</selectedcolor>
                         <align>left</align>
                         <info>ListItem.Label2</info>
                     </control>
@@ -151,31 +153,37 @@
                 <control type="label" id="110">
                     <posx>20</posx>
                     <posy>10</posy>
-                    <width>600</width>
+                    <width>1000</width>
                     <height>48</height>
                     <font>font13</font>
+                    <textcolor>ffffffff</textcolor>
                     <label>$ADDON[script.module.buggalo 90000]</label>
-                    <aligny>center</aligny>
                 </control>
                 <control type="label" id="111">
                     <posx>20</posx>
-                    <posy>50</posy>
-                    <width>720</width>
+                    <posy>40</posy>
+                    <width>1000</width>
                     <height>80</height>
+                    <font>font13</font>
+                    <textcolor>ffffffff</textcolor>
                     <label>$ADDON[script.module.buggalo 91000]</label>
                 </control>
                 <control type="label">
                     <posx>20</posx>
-                    <posy>75</posy>
-                    <width>720</width>
+                    <posy>65</posy>
+                    <width>1000</width>
                     <height>80</height>
+                    <font>font13</font>
+                    <textcolor>ffffffff</textcolor>
                     <label>$ADDON[script.module.buggalo 91001]</label>
                 </control>
                 <control type="label">
                     <posx>20</posx>
-                    <posy>100</posy>
-                    <width>720</width>
+                    <posy>90</posy>
+                    <width>1000</width>
                     <height>80</height>
+                    <font>font13</font>
+                    <textcolor>ffffffff</textcolor>
                     <label>$ADDON[script.module.buggalo 91002]</label>
                 </control>
 
@@ -185,6 +193,8 @@
                     <posy>140</posy>
                     <width>233</width>
                     <height>40</height>
+                    <font>font13</font>
+                    <textcolor>ffffffff</textcolor>
                     <label>$ADDON[script.module.buggalo 91004]</label>
                     <align>center</align>
                     <aligny>center</aligny>
@@ -198,6 +208,8 @@
                     <posy>140</posy>
                     <width>233</width>
                     <height>40</height>
+                    <font>font13</font>
+                    <textcolor>ffffffff</textcolor>
                     <label>$ADDON[script.module.buggalo 91003]</label>
                     <align>center</align>
                     <texturefocus>buggalo-button-focus.png</texturefocus>
@@ -212,6 +224,8 @@
                     <posy>140</posy>
                     <width>233</width>
                     <height>40</height>
+                    <font>font13</font>
+                    <textcolor>ffffffff</textcolor>
                     <label>$ADDON[script.module.buggalo 91006]</label>
                     <align>center</align>
                     <aligny>center</aligny>
@@ -237,13 +251,12 @@
                     <width>740</width>
                     <height>48</height>
                     <font>font30</font>
+                    <textcolor>ffffffff</textcolor>
                     <label>$ADDON[script.module.buggalo 91005]</label>
                     <align>center</align>
                     <aligny>center</aligny>
                 </control>
             </control>
-
-
 
         </control>
 

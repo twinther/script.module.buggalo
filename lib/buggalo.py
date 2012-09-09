@@ -59,7 +59,7 @@ def getRandomHeading():
     Get a random heading for use in dialogs, etc.
     The heading contains a random movie quote from the English strings.xml
     """
-    return getLocalizedString(random.randint(90000, 90005))
+    return getLocalizedString(random.randint(90000, 90011))
 
 
 def getLocalizedString(id):
