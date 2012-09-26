@@ -22,5 +22,6 @@
     <string id="91006">Show error report</string>
     <string id="91007">Hide error report</string>
     <string id="91008">Unfortunately a problem occurred while showing the details...</string>
+    <string id="91009">Unable to send error report!</string>
 
 </strings>

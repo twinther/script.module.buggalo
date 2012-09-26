@@ -25,7 +25,8 @@ import simplejson
 import sys
 import traceback
 import urllib2
-
+import smtplib
+from email.mime.text import MIMEText
 import xbmc
 import xbmcaddon
 
@@ -128,3 +129,44 @@ def submitData(serviceUrl, data):
             pass # probably timeout; retry
 
 
+def emailData(recipient, data):
+    """
+
+    @param recipient:
+    @param data:
+    @return:
+    """
+
+    # build html table with data
+    body = '<table border="1">'
+    for group in sorted(data.keys()):
+        values = data[group]
+        if type(values) == dict:
+            body += '<tr><td colspan="2"><h2>%s</h2></td></tr>' % group.capitalize()
+            keys = values.keys()
+            if group == 'userflow':
+                keys = sorted(keys)
+
+            for key in keys:
+                body += '<tr><td>%s</td>' % key
+                if key == 'stacktrace':
+                    body += '<td><pre>'
+                    for item in values[key]:
+                        body += item + '\n'
+                    body += '</pre></td>'
+                else:
+                    body += '<td>%s</td>' % str(values[key])
+                body += '</tr>'
+        else:
+            body += '<tr><td><h2>%s</h2></td><td>%s</td></tr>' % (group.capitalize(), str(values))
+    body += '</table>'
+
+    msg = MIMEText(body, 'html')
+    msg['Subject'] = '[Buggalo][%s] %s' % (data['addon']['id'], data['exception']['value'])
+    msg['From'] = 'Buggalo'
+    msg['To'] = recipient
+    msg['X-Mailer'] = 'Buggalo Exception Collector'
+
+    smtp = smtplib.SMTP('gmail-smtp-in.l.google.com')
+    smtp.sendmail(msg['From'], msg['To'], msg.as_string(9))
+    smtp.quit()

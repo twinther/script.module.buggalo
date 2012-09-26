@@ -30,7 +30,7 @@ ACTION_PARENT_DIR = 9
 ACTION_PREVIOUS_MENU = 10
 
 class BuggaloDialog(xbmcgui.WindowXMLDialog):
-    THANKS_YOU_VISIBLE_LABEL = 98
+    THANK_YOU_VISIBLE_LABEL = 98
     DETAILS_VISIBLE_LABEL = 99
     CLOSE_BUTTON = 100
     SUBMIT_BUTTON = 101
@@ -42,13 +42,15 @@ class BuggaloDialog(xbmcgui.WindowXMLDialog):
     ERROR_MESSAGE_GROUP = 200
     DETAILS_GROUP = 201
     THANK_YOU_GROUP = 202
+    THANK_YOU_LABEL = 203
 
-    def __new__(cls, serviceUrl, heading, data):
+    def __new__(cls, serviceUrl, gmailRecipient, heading, data):
         return super(BuggaloDialog, cls).__new__(cls, 'buggalo-dialog.xml', buggaloAddon.getAddonInfo('path'))
 
-    def __init__(self, serviceUrl, heading, data):
+    def __init__(self, serviceUrl, gmailRecipient, heading, data):
         super(BuggaloDialog, self).__init__()
         self.serviceUrl = serviceUrl
+        self.gmailRecipient = gmailRecipient
         self.heading = heading
         self.data = data
         self.detailsVisible = False
@@ -57,7 +59,7 @@ class BuggaloDialog(xbmcgui.WindowXMLDialog):
     def onInit(self):
         self.getControl(self.HEADING_LABEL).setLabel(self.heading)
         self.getControl(self.DETAILS_VISIBLE_LABEL).setVisible(not self.detailsVisible)
-        self.getControl(self.THANKS_YOU_VISIBLE_LABEL).setVisible(True)
+        self.getControl(self.THANK_YOU_VISIBLE_LABEL).setVisible(True)
         self.getControl(self.DETAILS_LINE1_LABEL).setLabel(buggaloAddon.getLocalizedString(91000) % self.data['addon']['name'])
         listControl = self.getControl(self.DETAILS_LIST)
 
@@ -94,9 +96,15 @@ class BuggaloDialog(xbmcgui.WindowXMLDialog):
 
         elif controlId == self.SUBMIT_BUTTON:
             self.getControl(self.DETAILS_VISIBLE_LABEL).setVisible(True)
-            self.getControl(self.THANKS_YOU_VISIBLE_LABEL).setVisible(False)
+            self.getControl(self.THANK_YOU_VISIBLE_LABEL).setVisible(False)
 
-            client.submitData(self.serviceUrl, self.data)
+            try:
+                if self.serviceUrl is not None:
+                    client.submitData(self.serviceUrl, self.data)
+                elif self.gmailRecipient is not None:
+                    client.emailData(self.gmailRecipient, self.data)
+            except Exception:
+                self.getControl(self.THANK_YOU_LABEL).setLabel(buggaloAddon.getLocalizedString(91009))
 
             xbmc.sleep(2000)
             self.close()

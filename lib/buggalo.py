@@ -29,9 +29,16 @@ import buggalo_client as client
 import buggalo_gui as gui
 import buggalo_userflow as userflow
 
-#   The full URL to where the gathered data should be posted.
+# You must provide either the SUBMIT_URL or GMAIL_RECIPIENT
+# via buggalo.SUBMIT_URL = '' or buggalo.GMAIL_RECIPIENT = ''
+
+# The full URL to where the gathered data should be posted.
 SUBMIT_URL = None
+# The email address where the gathered data should be sent.
+GMAIL_RECIPIENT = None
+
 EXTRA_DATA = dict()
+
 SCRIPT_ADDON = len(sys.argv) == 1
 
 if not SCRIPT_ADDON:
@@ -111,6 +118,6 @@ def onExceptionRaised(extraData = None):
     heading = getRandomHeading()
     data = client.gatherData(type, value, traceback, extraData, EXTRA_DATA)
 
-    d = gui.BuggaloDialog(SUBMIT_URL, heading, data)
+    d = gui.BuggaloDialog(SUBMIT_URL, GMAIL_RECIPIENT, heading, data)
     d.doModal()
     del d
