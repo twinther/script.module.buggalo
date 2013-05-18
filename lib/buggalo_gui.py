@@ -60,7 +60,7 @@ class BuggaloDialog(xbmcgui.WindowXMLDialog):
         self.getControl(self.HEADING_LABEL).setLabel(self.heading)
         self.getControl(self.DETAILS_VISIBLE_LABEL).setVisible(not self.detailsVisible)
         self.getControl(self.THANK_YOU_VISIBLE_LABEL).setVisible(True)
-        self.getControl(self.DETAILS_LINE1_LABEL).setLabel(buggaloAddon.getLocalizedString(91000) % self.data['addon']['name'])
+        self.getControl(self.DETAILS_LINE1_LABEL).setLabel(buggaloAddon.getLocalizedString(91000) % self.data['addon']['name'].decode('utf-8', 'replace'))
         listControl = self.getControl(self.DETAILS_LIST)
 
         try:
