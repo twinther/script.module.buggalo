@@ -87,7 +87,7 @@ def buggalo_try_except(extraData = None):
     def decorator(fn):
         def wrap_in_try_except(*args, **kwargs):
             try:
-                fn(*args, **kwargs)
+                return fn(*args, **kwargs)
             except Exception:
                 onExceptionRaised(extraData)
         return wrap_in_try_except
