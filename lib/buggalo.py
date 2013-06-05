@@ -1,5 +1,5 @@
 #
-#      Copyright (C) 2012 Tommy Winther
+#      Copyright (C) 2013 Tommy Winther
 #      http://tommy.winther.nu
 #
 #  This Program is free software; you can redistribute it and/or modify
@@ -45,8 +45,10 @@ if not SCRIPT_ADDON:
     # Automatically track userflow for plugin type addons
     userflow.trackUserFlow('%s%s' % (sys.argv[0], sys.argv[2]))
 
+
 def addExtraData(key, value):
     EXTRA_DATA[key] = value
+
 
 def trackUserFlow(value):
     """
@@ -61,6 +63,7 @@ def trackUserFlow(value):
     """
     userflow.trackUserFlow(value)
 
+
 def getRandomHeading():
     """
     Get a random heading for use in dialogs, etc.
@@ -73,7 +76,7 @@ def getLocalizedString(id):
     """
     Same as Addon.getLocalizedString() but retrieves data from this module's strings.xml
     """
-    buggaloAddon = xbmcaddon.Addon(id = 'script.module.buggalo')
+    buggaloAddon = xbmcaddon.Addon(id='script.module.buggalo')
     return buggaloAddon.getLocalizedString(id)
 
 
@@ -93,7 +96,8 @@ def buggalo_try_except(extraData = None):
         return wrap_in_try_except
     return decorator
 
-def onExceptionRaised(extraData = None):
+
+def onExceptionRaised(extraData=None):
     """
     Invoke this method in an except clause to allow the user to submit
     a bug report with stacktrace, system information, etc.
@@ -104,8 +108,8 @@ def onExceptionRaised(extraData = None):
     @param extraData: str or dict
     """
     # start by logging the usual info to stderr
-    (type, value, traceback) = sys.exc_info()
-    tb.print_exception(type, value, traceback)
+    (etype, value, traceback) = sys.exc_info()
+    tb.print_exception(etype, value, traceback)
 
     if not SCRIPT_ADDON:
         try:
@@ -116,7 +120,7 @@ def onExceptionRaised(extraData = None):
             pass
 
     heading = getRandomHeading()
-    data = client.gatherData(type, value, traceback, extraData, EXTRA_DATA)
+    data = client.gatherData(etype, value, traceback, extraData, EXTRA_DATA)
 
     d = gui.BuggaloDialog(SUBMIT_URL, GMAIL_RECIPIENT, heading, data)
     d.doModal()

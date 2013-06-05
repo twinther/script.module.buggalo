@@ -1,5 +1,5 @@
 #
-#      Copyright (C) 2012 Tommy Winther
+#      Copyright (C) 2013 Tommy Winther
 #      http://tommy.winther.nu
 #
 #  This Program is free software; you can redistribute it and/or modify
@@ -18,16 +18,20 @@
 #  http://www.gnu.org/copyleft/gpl.html
 #
 #
+import sys
+import traceback
+
 import buggalo_client as client
 
 import xbmc
 import xbmcaddon
 import xbmcgui
 
-buggaloAddon = xbmcaddon.Addon(id = 'script.module.buggalo')
+buggaloAddon = xbmcaddon.Addon(id='script.module.buggalo')
 
 ACTION_PARENT_DIR = 9
 ACTION_PREVIOUS_MENU = 10
+
 
 class BuggaloDialog(xbmcgui.WindowXMLDialog):
     THANK_YOU_VISIBLE_LABEL = 98
@@ -55,7 +59,6 @@ class BuggaloDialog(xbmcgui.WindowXMLDialog):
         self.data = data
         self.detailsVisible = False
 
-
     def onInit(self):
         self.getControl(self.HEADING_LABEL).setLabel(self.heading)
         self.getControl(self.DETAILS_VISIBLE_LABEL).setVisible(not self.detailsVisible)
@@ -74,17 +77,15 @@ class BuggaloDialog(xbmcgui.WindowXMLDialog):
                         keys = sorted(keys)
 
                     for key in keys:
-                            item = xbmcgui.ListItem(label = '    %s' % key, label2 = str(values[key]))
+                            item = xbmcgui.ListItem(label='    %s' % key, label2=str(values[key]))
                             listControl.addItem(item)
 
                 else:
-                    item = xbmcgui.ListItem(label = '[B]%s[/B]' % group, label2 = str(values))
+                    item = xbmcgui.ListItem(label='[B]%s[/B]' % group, label2=str(values))
                     listControl.addItem(item)
         except Exception:
-            item = xbmcgui.ListItem(label2 = buggaloAddon.getLocalizedString(91008))
+            item = xbmcgui.ListItem(label2=buggaloAddon.getLocalizedString(91008))
             listControl.addItem(item)
-
-
 
     def onAction(self, action):
         if action.getId() in [ACTION_PARENT_DIR, ACTION_PREVIOUS_MENU]:
@@ -105,6 +106,8 @@ class BuggaloDialog(xbmcgui.WindowXMLDialog):
                     client.emailData(self.gmailRecipient, self.data)
             except Exception:
                 self.getControl(self.THANK_YOU_LABEL).setLabel(buggaloAddon.getLocalizedString(91009))
+                (etype, value, tb) = sys.exc_info()
+                traceback.print_exception(etype, value, tb)
 
             xbmc.sleep(2000)
             self.close()
@@ -116,7 +119,6 @@ class BuggaloDialog(xbmcgui.WindowXMLDialog):
                 self.getControl(self.DETAILS_BUTTON).setLabel(buggaloAddon.getLocalizedString(91007))
             else:
                 self.getControl(self.DETAILS_BUTTON).setLabel(buggaloAddon.getLocalizedString(91006))
-
 
     def onFocus(self, control):
         pass

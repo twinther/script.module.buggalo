@@ -1,5 +1,5 @@
 #
-#      Copyright (C) 2012 Tommy Winther
+#      Copyright (C) 2013 Tommy Winther
 #      http://tommy.winther.nu
 #
 #  This Program is free software; you can redistribute it and/or modify
@@ -32,14 +32,15 @@ import xbmcaddon
 
 import buggalo_userflow as userflow
 
-def gatherData(type, value, tracebackInfo, extraData, globalExtraData):
+
+def gatherData(etype, value, tracebackInfo, extraData, globalExtraData):
     data = dict()
     data['version'] = 4
     data['timestamp'] = datetime.datetime.now().isoformat()
 
     exception = dict()
     exception['stacktrace'] = traceback.format_tb(tracebackInfo)
-    exception['type'] = str(type)
+    exception['type'] = str(etype)
     exception['value'] = str(value)
     data['exception'] = exception
 
@@ -107,8 +108,8 @@ def gatherData(type, value, tracebackInfo, extraData, globalExtraData):
         elif extraData is not None:
             extraDataInfo[''] = str(extraData)
     except Exception, ex:
-        (type, value, tb) = sys.exc_info()
-        traceback.print_exception(type, value, tb)
+        (etype, value, tb) = sys.exc_info()
+        traceback.print_exception(etype, value, tb)
         extraDataInfo['exception'] = str(ex)
     data['extraData'] = extraDataInfo
 
@@ -124,7 +125,7 @@ def submitData(serviceUrl, data):
             u = urllib2.urlopen(req)
             u.read()
             u.close()
-            break # success; no further attempts
+            break  # success; no further attempts
         except Exception:
             pass # probably timeout; retry
 
